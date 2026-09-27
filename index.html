@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>我们的恋爱小屋</title>
+<style>
+:root{
+  --pink:#f472b6;--pink-d:#ec4899;--purple:#a855f7;--red:#ef4444;--green:#22c55e;--blue:#3b82f6;
+  --ink:#4b5563;--ink2:#6b7280;--card:#fff;--line:#fce7f3;--soft:#fdf2f8;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  color:var(--ink);
+  background:linear-gradient(160deg,#fff1f2,#fdf2f8 40%,#fae8ff);
+  min-height:100vh;padding-bottom:70px;
+}
+#app{max-width:520px;margin:0 auto;padding:16px 16px 24px;padding-top:calc(16px + env(safe-area-inset-top))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 4px 16px rgba(236,72,153,.06);margin-bottom:14px}
+.grad-card{background:linear-gradient(135deg,#f472b6,#a855f7);color:#fff;border:none}
+.grad-card .sub{color:rgba(255,255,255,.85)}
+h1{font-size:20px;margin:4px 0 8px;color:#111827}
+h3{font-size:15px;margin:0 0 8px;color:#111827}
+p{line-height:1.6;margin:6px 0}
+.sub{color:#9ca3af;font-size:13px}
+.muted{color:#9ca3af;font-size:12px}
+.row{display:flex;align-items:center;gap:10px}
+.between{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.btn{display:block;width:100%;border:none;border-radius:999px;padding:13px 18px;font-size:15px;font-weight:600;cursor:pointer;transition:.15s;font-family:inherit}
+.btn:active{transform:scale(.97)}
+.btn-green{background:var(--green);color:#fff}
+.btn-green:disabled{opacity:.6;cursor:default}
+.btn-candy{background:linear-gradient(135deg,#f472b6,#a855f7);color:#fff}
+.btn-ghost{background:var(--soft);color:var(--pink-d);border:1px solid var(--line)}
+.btn-danger{background:#fef2f2;color:var(--red);border:1px solid #fee2e2}
+.btn-sm{width:auto;display:inline-block;padding:7px 14px;font-size:13px}
+.btn-purple{background:#f5f3ff;color:#7c3aed;border:1px solid #ede9fe}
+.input,select.input,textarea.input{width:100%;border:2px solid var(--line);border-radius:14px;padding:12px 14px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink);outline:none;margin:6px 0}
+.input:focus{border-color:var(--pink)}
+textarea.input{min-height:110px;resize:vertical}
+.label{font-size:13px;color:var(--ink2);font-weight:600;margin-top:6px;display:block}
+.chip{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600;background:var(--soft);color:var(--pink-d)}
+.tag-red{background:#fef2f2;color:var(--red)}
+.tag-green{background:#f0fdf4;color:#16a34a}
+.tag-blue{background:#eff6ff;color:var(--blue)}
+.tag-gray{background:#f3f4f6;color:#6b7280}
+.avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px;flex-shrink:0;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.avatar-lg{width:72px;height:72px;font-size:28px}
+.mono{font-family:ui-monospace,Consolas,monospace;font-size:12px;color:#9ca3af}
+.hr{border:none;border-top:1px dashed var(--line);margin:14px 0}
+/* header */
+.topbar{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.topbar .back{background:#fff;border:1px solid var(--line);border-radius:999px;width:36px;height:36px;font-size:16px;cursor:pointer}
+.topbar h1{margin:0;flex:1}
+.role{font-size:12px;padding:3px 10px;border-radius:999px;background:#fff;border:1px solid var(--line)}
+.iconbtn{background:#fff;border:1px solid var(--line);border-radius:50%;width:36px;height:36px;cursor:pointer;font-size:16px}
+/* login */
+.login-wrap{min-height:96vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:20px}
+.float-emo{position:absolute;font-size:34px;opacity:.5;animation:floaty 5s ease-in-out infinite}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-24px) rotate(6deg)}}
+.mascot{font-size:72px;animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+.login-title{font-size:24px;font-weight:800;color:#111827;margin:10px 0 4px}
+.login-card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:24px 20px;width:100%;max-width:340px;box-shadow:0 12px 30px rgba(236,72,153,.12);text-align:center;z-index:1}
+.wechat-dot{width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block;margin-right:6px;animation:pulse 1.6s infinite}
+/* stats */
+.stat{border-radius:16px;padding:14px;text-align:center}
+.stat .num{font-size:26px;font-weight:800;margin-top:2px}
+.lv-chip{font-size:13px;padding:4px 12px;border-radius:999px;background:rgba(255,255,255,.22);font-weight:700;display:inline-block}
+.lv0{background:#fee2e2;color:#dc2626}.lv1{background:#f1f5f9;color:#64748b}.lv2{background:#fce7f3;color:#db2777}
+.lv3{background:#ffe4e6;color:#e11d48}.lv4{background:#fef3c7;color:#d97706}.lv5{background:linear-gradient(135deg,#f472b6,#a855f7);color:#fff}
+.rec{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px dashed var(--line)}
+.rec:last-child{border-bottom:none}
+.dot{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.dot-plus{background:#f0fdf4;color:#16a34a}.dot-minus{background:#fef2f2;color:#ef4444}
+.pts{font-weight:800;font-size:15px}
+.pts-plus{color:#16a34a}.pts-minus{color:#ef4444}
+/* envelope */
+.env{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 4px 16px rgba(236,72,153,.06);margin-bottom:12px;position:relative}
+.env h3{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.emoji-line{font-size:18px;letter-spacing:6px}
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(17,24,39,.45);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}
+.modal{background:#fff;border-radius:20px;padding:20px;width:100%;max-width:340px;max-height:86vh;overflow:auto;animation:pop .18s ease}
+@keyframes pop{from{transform:scale(.9);opacity:.4}to{transform:scale(1);opacity:1}}
+/* toast */
+#toast-root{position:fixed;top:18px;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:8px;z-index:99;pointer-events:none}
+.toast{background:#111827;color:#fff;padding:10px 18px;border-radius:999px;font-size:14px;box-shadow:0 8px 20px rgba(0,0,0,.2);animation:pop .2s ease}
+.toast.ok{background:#16a34a}.toast.err{background:#dc2626}
+/* picker */
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0}
+.chips span{padding:7px 13px;border-radius:999px;background:var(--soft);border:1px solid var(--line);font-size:13px;cursor:pointer}
+.chips span.on{background:linear-gradient(135deg,#f472b6,#a855f7);color:#fff;border-color:transparent}
+.emoji-pick span{font-size:22px}
+.nav-item{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 8px;text-align:center;cursor:pointer;transition:.15s}
+.nav-item:active{transform:scale(.96)}
+.nav-item .big{font-size:24px}
+.nav-item .txt{font-size:12px;margin-top:4px;color:var(--ink2);font-weight:600}
+.center{text-align:center}
+.mt{margin-top:10px}.mb0{margin-bottom:0}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="modal-root"></div>
+<div id="toast-root"></div>
+<script>
+/* ================= 工具 ================= */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>Math.random().toString(36).slice(2,10);
+const today=()=>new Date().toDateString();
+const fmtDay=d=>new Date(d).toLocaleDateString('zh-CN',{year:'numeric',month:'long',day:'numeric'});
+const daysBetween=(a,b)=>Math.floor((new Date(b)-new Date(a))/86400000);
+function daysUntilNext(dateStr){const d=new Date(dateStr);const now=new Date();let y=now.getFullYear();let n=new Date(y,d.getMonth(),d.getDate());if(n<new Date(now.toDateString()))n=new Date(y+1,d.getMonth(),d.getDate());return Math.round((n-new Date(now.toDateString()))/86400000);}
+function toast(msg,kind=''){const t=document.createElement('div');t.className='toast '+kind;t.textContent=msg;$('#toast-root').appendChild(t);setTimeout(()=>t.remove(),2300);}
+function openModal(html){$('#modal-root').innerHTML='<div class="overlay" data-act="overlay"><div class="modal">'+html+'</div></div>';}
+function closeModal(){$('#modal-root').innerHTML='';}
+
+/* ================= 数据 ================= */
+const DB_KEY='love-house-html-v1';
+function seed(){
+  const now=Date.now();
+  return {
+    session:null,
+    users:[
+      {id:'u1',openid:'ox_mock_lover_a',name:'微信用户·老公',avatar:'',familyId:'f1',role:'manager',email:'lover_a@wx.example'},
+      {id:'u2',openid:'ox_mock_lover_b',name:'微信用户·老婆',avatar:'',familyId:null,role:'member',email:'lover_b@wx.example'}
+    ],
+    family:{id:'f1',name:'测试家庭',dailyDeductLimit:20},
+    records:[
+      {id:'r1',familyId:'f1',fromUserId:'u1',toUserId:'u2',points:5,reason:'今天主动洗碗',createdAt:new Date(now-3600e3*5).toISOString()},
+      {id:'r2',familyId:'f1',fromUserId:'u1',toUserId:'u2',points:-10,reason:'忘记倒垃圾',createdAt:new Date(now-3600e3*26).toISOString()}
+    ],
+    appeals:[],
+    anniversaries:[
+      {id:'a1',title:'恋爱纪念日',date:'2026-02-14',type:'together'},
+      {id:'a2',title:'你的生日',date:'2026-11-20',type:'birthday'}
+    ],
+    invites:[]
+  };
+}
+let db;
+try{db=JSON.parse(localStorage.getItem(DB_KEY))}catch(e){db=null}
+if(!db||!db.users||!db.family&&db.family!==null)db=seed();
+if(!db.appeals)db.appeals=[];if(!db.invites)db.invites=[];if(!db.anniversaries)db.anniversaries=[];if(!db.records)db.records=[];
+const save=()=>localStorage.setItem(DB_KEY,JSON.stringify(db));
+const me=()=>db.users.find(u=>u.id===db.session);
+const myFamily=()=>{const u=me();return u&&u.familyId?db.family:null;};
+const members=()=>{const f=myFamily();return f?db.users.filter(u=>u.familyId===f.id):[];};
+const balanceOf=id=>db.records.filter(r=>r.toUserId===id).reduce((s,r)=>s+r.points,0);
+const todayDeduct=id=>Math.abs(db.records.filter(r=>r.toUserId===id&&r.points<0&&new Date(r.createdAt).toDateString()===today()).reduce((s,r)=>s+r.points,0));
+const appealsOf=rid=>db.appeals.filter(a=>a.pointsRecordId===rid);
+function level(lv){if(lv<0)return['冷战中','lv0'];if(lv<200)return['初心','lv1'];if(lv<500)return['甜蜜','lv2'];if(lv<1000)return['热恋','lv3'];if(lv<520)return['永远','lv4'];return['永远','lv5'];}
+function avatarHTML(u,cls=''){const g=['#ec4899,#a855f7','#f59e0b,#ef4444','#22c55e,#14b8a6','#3b82f6,#8b5cf6','#f43f5e,#fb923c'];const i=(u.id.charCodeAt(1)||0)%g.length;
+  return `<span class="avatar ${cls}" style="background:linear-gradient(135deg,${g[i]})">${u.avatar?`<img src="${esc(u.avatar)}">`:esc((u.name||'?').slice(-2,-1)||u.name[0])}</span>`;}
+function topbar(title,back=true){return `<div class="topbar">${back?'<button class="back" data-act="go" data-hash="#/dashboard">←</button>':''}<h1>${esc(title)}</h1><button class="iconbtn" data-act="go" data-hash="#/profile">👤</button></div>`;}
+function go(h){location.hash=h;}
+
+/* ================= 页面：登录 ================= */
+function viewLogin(){
+  $('#app').innerHTML=`
+  <div class="login-wrap">
+    <div class="float-emo" style="top:8%;left:12%">💖</div>
+    <div class="float-emo" style="top:18%;right:14%;animation-delay:1.2s">💕</div>
+    <div class="float-emo" style="bottom:22%;left:18%;animation-delay:.6s">✨</div>
+    <div class="float-emo" style="bottom:14%;right:20%;animation-delay:1.8s">🐱</div>
+    <div class="mascot">🐱</div>
+    <div class="login-title">我们的恋爱小屋</div>
+    <div class="sub" style="margin-bottom:18px">♡ 吵不散的两个人 ♡</div>
+    <div class="login-card">
+      <p style="font-size:14px;color:#6b7280">使用微信账号，<br>手机电脑同一情侣空间</p>
+      <button class="btn btn-green mt" data-act="wechat-login"><span class="wechat-dot"></span>微信登录</button>
+      <div class="muted mt">唯一标识自动创建或绑定账号</div>
+    </div>
+    <div class="muted" style="margin-top:22px;z-index:1">两端登录 · 数据同步</div>
+  </div>`;
+}
+function wechatLoginModal(){
+  const opts=db.users.map(u=>`<button class="btn btn-ghost" style="margin-bottom:10px;text-align:left" data-act="pick-user" data-id="${u.id}">${avatarHTML(u)} <span style="margin-left:8px">${esc(u.name)}</span><div class="mono" style="margin-left:46px;margin-top:-18px">${esc(u.openid)}</div></button>`).join('');
+  openModal(`<div class="center"><div style="font-size:40px">💚</div><h3>模拟微信授权</h3><div class="muted" style="margin-bottom:12px">选择一个预设微信账号登录</div>${opts}<button class="btn btn-danger btn-sm mt" data-act="close-modal">取消</button></div>`);
+}
+
+/* ================= 页面：首页 ================= */
+function viewDashboard(){
+  const u=me(),f=myFamily();
+  const head=`<div class="topbar"><h1>你好，${esc(u.name)} ❤️</h1>
+    <span class="role">${f?(u.role==='manager'?'👑 管理者':'👫 被管理者'):'未加入家庭'}</span>
+    <button class="iconbtn" data-act="go" data-hash="#/profile">👤</button></div>`;
+  if(!f){
+    $('#app').innerHTML=head+`
+    <div class="card center"><div style="font-size:44px">🏠</div><h3>还没有加入家庭</h3>
+      <p class="sub">创建一个情侣空间，或用邀请码加入另一半的家</p></div>
+    <div class="grid2">
+      <button class="btn btn-candy" data-act="create-family">💝 创建家庭</button>
+      <button class="btn btn-ghost" data-act="join-family">💌 用邀请码加入</button>
+    </div>`;
+    return;
+  }
+  const ms=members();
+  const myLv=level(balanceOf(u.id));
+  const recs=db.records.filter(r=>r.familyId===f.id).sort((a,b)=>b.createdAt-a.createdAt).slice(0,5);
+  const together=db.anniversaries.filter(a=>a.type==='together').sort((a,b)=>a.date.localeCompare(b.date))[0];
+  const ups=db.anniversaries.map(a=>({...a,d:daysUntilNext(a.date)})).sort((a,b)=>a.d-b.d).slice(0,3);
+  $('#app').innerHTML=head+`
+  <div class="card grad-card">
+    <div class="between"><div><div style="font-size:18px;font-weight:800">🏠 ${esc(f.name)}</div>
+      <div class="sub" style="margin-top:4px">${ms.length<2?'等待另一半加入':'❤ '+ms.map(m=>esc(m.name)).join(' ❤')+' 已成家'}</div></div>
+      <div class="lv-chip">${ms.length<2?'💗':'❤️'}</div></div>
+    <div class="grid2" style="margin-top:14px">
+      <div class="stat" style="background:rgba(255,255,255,.18)"><div style="font-size:12px;opacity:.9">我的积分</div><div class="num">${balanceOf(u.id)}</div></div>
+      <div class="stat" style="background:rgba(255,255,255,.18)"><div style="font-size:12px;opacity:.9">爱情等级</div><div class="num" style="font-size:20px">${myLv[0]}</div></div>
+    </div>
+  </div>
+  <div class="grid3">
+    <div class="nav-item" data-act="go" data-hash="#/points"><div class="big">⭐</div><div class="txt">积分中心</div></div>
+    <div class="nav-item" data-act="go" data-hash="#/appeals"><div class="big">📮</div><div class="txt">申诉信箱</div></div>
+    <div class="nav-item" data-act="go" data-hash="#/anniversaries"><div class="big">❤️</div><div class="txt">纪念日</div></div>
+  </div>
+  ${together?`<div class="card center mt"><div class="sub">我们已经在一起</div>
+    <div style="font-size:34px;font-weight:800;color:var(--pink-d)">${daysBetween(together.date,new Date())} <span style="font-size:15px">天</span></div>
+    <div class="sub">始于 ${fmtDay(together.date)}</div></div>`:''}
+  ${ups.length?`<div class="card"><h3>📅 即将到来</h3>${ups.map(a=>`<div class="between" style="padding:6px 0"><span>${a.type==='together'?'💍':a.type==='birthday'?'🎂':'🎉'} ${esc(a.title)}</span><span class="chip">${a.d===0?'就是今天':'还有 '+a.d+' 天'}</span></div>`).join('')}</div>`:''}
+  ${u.role==='manager'?`<div class="card"><div class="between"><div><h3>💌 邀请另一半</h3><div class="muted">生成邀请码，对方加入后即可开始记录</div></div></div>
+    <div class="grid2 mt"><button class="btn btn-candy btn-sm" data-act="show-invite">生成邀请码</button><button class="btn btn-purple btn-sm" data-act="family-settings">⚙ 家庭设置</button></div></div>`:''}
+  <div class="card"><div class="between"><h3>📒 最近记录</h3><button class="btn btn-ghost btn-sm" data-act="go" data-hash="#/points">全部 ›</button></div>
+    ${recs.length?recs.map(r=>recLine(r)).join(''):'<div class="muted center" style="padding:12px">还没有积分记录</div>'}</div>`;
+}
+function recLine(r){
+  const from=db.users.find(u=>u.id===r.fromUserId),to=db.users.find(u=>u.id===r.toUserId);
+  const ap=appealsOf(r.id);
+  let badge='';
+  if(ap.some(a=>a.status==='pending'))badge='<span class="chip tag-blue">申诉中</span>';
+  else if(ap.some(a=>a.status==='approved'||a.status==='modified'))badge='<span class="chip tag-green">已通过</span>';
+  else if(ap.some(a=>a.status==='rejected'))badge='<span class="chip tag-red">已驳回</span>';
+  return `<div class="rec"><span class="dot ${r.points>0?'dot-plus':'dot-minus'}">${r.points>0?'➕':'➖'}</span>
+    <div style="flex:1;min-width:0"><div style="font-size:14px">${esc(from?.name||'?')} → ${esc(to?.name||'?')}｜${esc(r.reason)}</div>
+    <div class="muted">${fmtDay(r.createdAt)} ${badge}</div></div>
+    <span class="pts ${r.points>0?'pts-plus':'pts-minus'}">${r.points>0?'+'+r.points:r.points}</span></div>`;
+}
+
+/* ================= 页面：积分中心 ================= */
+let pendingTarget=null;
+function viewPoints(){
+  const u=me(),f=myFamily();
+  if(!f){go('#/dashboard');return;}
+  const ms=members(),other=ms.find(m=>m.id!==u.id)||ms[0];
+  const recs=db.records.filter(r=>r.familyId===f.id).sort((a,b)=>b.createdAt-a.createdAt);
+  const isMgr=u.role==='manager';
+  const myLv=level(balanceOf(u.id));
+  const mine=ms.filter(m=>m.id===u.id),rest=ms.filter(m=>m.id!==u.id);
+  const balCard=(m,hot)=>`<div class="stat card ${hot?'grad-card':''}" style="margin-bottom:0">
+    <div class="between"><div class="row">${avatarHTML(m)}<div><div style="font-size:13px;font-weight:700;${hot?'':''}">${esc(m.name)}${m.id===u.id?'（我）':''}</div>
+    <div class="sub" style="${hot?'color:rgba(255,255,255,.85)':''}">${m.role==='manager'?'👑 管理者':'👫 被管理者'}</div></div></div>
+    <div class="num" style="font-size:24px">${balanceOf(m.id)}</div></div>
+    <div class="between mt" style="font-size:12px;${hot?'color:rgba(255,255,255,.85)':''}">
+      <span>今日${m.id===u.id?myLv[0]:'爱情等级 '+level(balanceOf(m.id))[0]}</span>
+      ${m.id===u.id?`<span>今日已扣 ${todayDeduct(u.id)} / ${f.dailyDeductLimit}</span>`:''}</div></div>`;
+  $('#app').innerHTML=topbar('积分中心')+`
+  <div class="grid2">${balCard(mine[0],true)}${rest.length?balCard(rest[0],false):''}</div>
+  ${isMgr?`<div class="card mt"><h3>⚙ 给成员加减分</h3>
+    <label class="label">成员</label>
+    <select class="input" id="pt-target">${ms.map(m=>`<option value="${m.id}">${esc(m.name)}${m.id===u.id?'（我）':''}</option>`).join('')}</select>
+    <label class="label">分值（-1000 ~ 1000，非0整数）</label>
+    <input class="input" id="pt-points" type="number" placeholder="例如 5 或 -10" value="5">
+    <label class="label">原因</label>
+    <input class="input" id="pt-reason" placeholder="例如 主动洗碗 / 忘记倒垃圾">
+    <div class="grid2 mt"><button class="btn btn-green btn-sm" data-act="score" data-sign="1">➕ 加分</button>
+    <button class="btn btn-danger btn-sm" data-act="score" data-sign="-1">➖ 扣分</button></div>
+    <div class="muted mt">每天最多扣 ${f.dailyDeductLimit} 分 · 记录在下方写申诉信</div></div>`:''}
+  <div class="card"><h3>📒 积分记录</h3>
+    ${recs.length?recs.map(r=>{const own=r.toUserId===u.id;const pend=appealsOf(r.id).some(a=>a.status==='pending');
+      return `<div style="border-bottom:1px dashed var(--line);padding-bottom:8px;margin-bottom:8px">${recLine(r)}
+      ${own&&r.points<0&&!pend?`<button class="btn btn-ghost btn-sm" style="margin-top:6px" data-act="go" data-hash="#/appeal-write?recordId=${r.id}">✍ 写申诉信</button>`:''}</div>`;}).join(''):'<div class="muted center" style="padding:12px">还没有积分记录</div>'}</div>`;
+}
+
+/* ================= 页面：写申诉信 ================= */
+function viewAppealWrite(q){
+  const u=me();
+  const r=db.records.find(x=>x.id===q.recordId);
+  if(!r||r.toUserId!==u.id){go('#/points');return;}
+  const from=db.users.find(x=>x.id===r.fromUserId);
+  $('#app').innerHTML=topbar('写申诉信')+`
+  <div class="card"><div class="rec" style="border:none;padding:0">
+    <span class="dot ${r.points>0?'dot-plus':'dot-minus'}">${r.points>0?'➕':'➖'}</span>
+    <div style="flex:1"><div style="font-size:14px">${esc(from?.name||'?')} → 我｜${esc(r.reason)}</div>
+    <div class="muted">${fmtDay(r.createdAt)}</div></div>
+    <span class="pts ${r.points>0?'pts-plus':'pts-minus'}">${r.points>0?'+'+r.points:r.points}</span></div></div>
+  <div class="card">
+    <h3>💌 申诉信</h3>
+    <label class="label">标题</label>
+    <input class="input" id="ap-title" placeholder="例如：关于忘记倒垃圾的申诉">
+    <label class="label">说明（5~500字）</label>
+    <textarea class="input" id="ap-text" placeholder="说明实际情况……"></textarea>
+    <div class="chips emoji-pick" id="ap-emoji">${['🥺','😭','❤️','💔','😤','🐶','🐱','🌹'].map(e=>`<span data-act="insert-emoji" data-e="${e}">${e}</span>`).join('')}</div>
+    <button class="btn btn-candy" data-act="send-appeal" data-id="${r.id}">💌 发送</button>
+  </div>`;
+}
+
+/* ================= 页面：申诉信箱 ================= */
+function viewAppeals(){
+  const u=me(),f=myFamily();
+  if(!f){go('#/dashboard');return;}
+  const isMgr=u.role==='manager';
+  const list=db.appeals.filter(a=>a.familyId===f.id&&(isMgr||a.appellantId===u.id)).sort((a,b)=>b.createdAt-a.createdAt);
+  const badge=s=>s==='pending'?'<span class="chip tag-blue">⏳ 待处理</span>':s==='approved'?'<span class="chip tag-green">✓ 已通过</span>':s==='rejected'?'<span class="chip tag-red">✗ 已驳回</span>':'<span class="chip tag-green">✎ 已修改</span>';
+  $('#app').innerHTML=topbar('申诉信箱')+`
+  ${list.length?list.map(a=>{
+    const r=db.records.find(x=>x.id===a.pointsRecordId);
+    const appellant=db.users.find(x=>x.id===a.appellantId);
+    return `<div class="env" data-act="go" data-hash="#/appeal?id=${a.id}" style="cursor:pointer">
+      <div class="emoji-line">💌</div>
+      <h3>${esc(a.reason)} ${badge(a.status)}</h3>
+      <div class="muted">来自 ${esc(appellant?.name||'?')} ｜ ${r?esc(r.reason):''} ${r?(r.points>0?'+'+r.points:r.points):''} ｜ ${fmtDay(a.createdAt)}</div>
+      <div class="sub" style="margin-top:6px">${esc((a.explanation||'').slice(0,40))}${(a.explanation||'').length>40?'…':''}</div>
+      ${a.status!=='pending'?`<div class="muted mt">📮 管理者回信：${esc(a.managerReplyLetter||a.managerResponse||'—')}</div>`:''}
+    </div>`;}).join(''):`<div class="card center"><div style="font-size:40px">📮</div><p class="sub">信箱空空如也</p></div>`}`;
+}
+function viewAppealDetail(q){
+  const u=me(),f=myFamily();
+  const a=db.appeals.find(x=>x.id===q.id);
+  if(!a||(u.role!=='manager'&&a.appellantId!==u.id)){go('#/appeals');return;}
+  const r=db.records.find(x=>x.id===a.pointsRecordId);
+  const from=db.users.find(x=>x.id===r?.fromUserId);
+  const isMgr=u.role==='manager';
+  if(isMgr&&!a.isReadByManager){a.isReadByManager=true;save();}
+  const statusTxt={pending:'⏳ 待处理',approved:'✓ 已通过',rejected:'✗ 已驳回',modified:'✎ 修改后通过'}[a.status];
+  $('#app').innerHTML=topbar('申诉详情')+`
+  <div class="card"><div class="rec" style="border:none;padding:0">
+    <span class="dot ${r.points>0?'dot-plus':'dot-minus'}">${r.points>0?'➕':'➖'}</span>
+    <div style="flex:1"><div style="font-size:14px">${esc(from?.name||'?')} → ${esc(db.users.find(x=>x.id===r.toUserId)?.name||'?')}｜${esc(r.reason)}</div>
+    <div class="muted">${fmtDay(r.createdAt)}</div></div>
+    <span class="pts ${r.points>0?'pts-plus':'pts-minus'}">${r.points>0?'+'+r.points:r.points}</span></div></div>
+  <div class="env"><div class="emoji-line">💌</div><h3>${esc(a.reason)} <span class="chip ${a.status==='pending'?'tag-blue':a.status==='rejected'?'tag-red':'tag-green'}">${statusTxt}</span></h3>
+    <p style="white-space:pre-wrap">${esc(a.explanation)}</p>
+    <div class="muted">申诉人：${esc(db.users.find(x=>x.id===a.appellantId)?.name||'?')} ｜ ${fmtDay(a.createdAt)}</div>
+    ${a.status!=='pending'?`<hr class="hr"><div class="label">管理者回复</div><p>${esc(a.managerResponse||'—')}</p>
+      ${a.managerReplyLetter?`<div class="label">回信信件</div><p>📮 ${esc(a.managerReplyLetter)}</p>`:''}
+      ${a.modifiedPoints?`<div class="label">修改后的扣分</div><p class="pts pts-minus">${a.modifiedPoints} 分</p>`:''}`:''}
+  </div>
+  ${isMgr&&a.status==='pending'?`<div class="card"><h3>⚙ 处理申诉</h3>
+    <label class="label">回复内容（驳回时必填）</label>
+    <textarea class="input" id="ap-resp" placeholder="说明处理意见……"></textarea>
+    <label class="label">回信信件（可选，对方会在信箱看到）</label>
+    <input class="input" id="ap-letter" placeholder="例如：下次注意就好，原谅你啦～">
+    <div id="mod-box" style="display:none"><label class="label">修改后的扣分（1~1000）</label>
+      <input class="input" id="ap-mod" type="number" placeholder="例如 5"></div>
+    <div class="grid3 mt">
+      <button class="btn btn-green btn-sm" data-act="appeal-approve" data-id="${a.id}">✓ 通过</button>
+      <button class="btn btn-danger btn-sm" data-act="appeal-reject" data-id="${a.id}">✗ 驳回</button>
+      <button class="btn btn-purple btn-sm" data-act="appeal-modify-show">✎ 修改</button>
+    </div>
+    <button class="btn btn-candy btn-sm mt" style="display:none;width:100%" id="mod-confirm" data-act="appeal-modify" data-id="${a.id}">确认修改后通过</button>
+  </div>`:''}`;
+}
+
+/* ================= 页面：纪念日 ================= */
+let annType='together';
+function viewAnniversaries(){
+  const f=myFamily();
+  if(!f){go('#/dashboard');return;}
+  const list=[...db.anniversaries].sort((a,b)=>a.date.localeCompare(b.date));
+  const together=db.anniversaries.filter(a=>a.type==='together').sort((a,b)=>a.date.localeCompare(b.date))[0];
+  const ups=db.anniversaries.map(a=>({...a,d:daysUntilNext(a.date)})).sort((a,b)=>a.d-b.d).slice(0,3);
+  const icon=t=>t==='together'?'💍':t==='birthday'?'🎂':'🎉';
+  const name=t=>t==='together'?'恋爱纪念日':t==='birthday'?'生日':'节日';
+  $('#app').innerHTML=topbar('纪念日')+`
+  ${together?`<div class="card grad-card center"><div class="sub" style="color:rgba(255,255,255,.85)">我们已经在一起</div>
+    <div style="font-size:36px;font-weight:800">${daysBetween(together.date,new Date())} <span style="font-size:16px">天</span></div>
+    <div class="sub" style="color:rgba(255,255,255,.85)">始于 ${fmtDay(together.date)}</div></div>`:''}
+  ${ups.length?`<div class="card"><h3>📅 即将到来</h3>${ups.map(a=>`<div class="between" style="padding:7px 0;border-bottom:1px dashed var(--line)"><span>${icon(a.type)} ${esc(a.title)}</span><span class="chip">${a.d===0?'🎉 就是今天':'还有 '+a.d+' 天'}</span></div>`).join('')}</div>`:''}
+  <div class="card"><h3>📅 全部纪念日</h3>
+    ${list.map(a=>{const d=daysBetween(a.date,new Date());return `<div class="between" style="padding:8px 0;border-bottom:1px dashed var(--line)">
+      <div><div>${icon(a.type)} ${esc(a.title)}</div><div class="muted">${name(a.type)} · ${fmtDay(a.date)}</div></div>
+      <span class="chip ${d>=0?'tag-red':'tag-gray'}">${d>=0?'已经 '+d+' 天':'还有 '+(-d)+' 天'}</span></div>`;}).join('')}
+    <div class="chips mt" id="ann-types">
+      ${[['together','恋爱纪念日'],['birthday','生日'],['festival','节日']].map(t=>`<span class="${annType===t[0]?'on':''}" data-act="ann-type" data-t="${t[0]}">${t[1]}</span>`).join('')}
+    </div>
+    <input class="input" id="ann-title" placeholder="名称，例如 我们的纪念日">
+    <input class="input" id="ann-date" type="date">
+    <button class="btn btn-candy" data-act="ann-add">❤ 添加纪念日</button>
+  </div>`;
+}
+
+/* ================= 页面：个人中心 ================= */
+function viewProfile(){
+  const u=me();
+  $('#app').innerHTML=topbar('个人中心',false)+`
+  <div class="card center">
+    <div id="avatar-box" style="display:flex;justify-content:center">${avatarHTML(u,'avatar-lg')}</div>
+    <h3 class="mt">${esc(u.name)}</h3>
+    <div class="mono">${esc(u.openid||'')}</div>
+    <div class="muted">${u.role==='manager'?'👑 管理者':'👫 被管理者'} ｜ ${u.familyId?'已加入家庭':'未加入家庭'}</div>
+    <button class="btn btn-ghost btn-sm mt" data-act="pick-avatar">🖼 更换头像（≤5MB）</button>
+    <input type="file" id="avatar-file" accept="image/*" style="display:none">
+  </div>
+  <div class="card"><h3>✏ 修改昵称</h3>
+    <input class="input" id="nick" value="${esc(u.name)}" maxlength="20">
+    <button class="btn btn-candy" data-act="save-nick">保存</button></div>
+  <div class="card"><h3>🔐 账号信息</h3>
+    <div class="between" style="padding:5px 0"><span class="muted">微信唯一ID</span><span class="mono">${esc(u.openid||'—')}</span></div>
+    <div class="between" style="padding:5px 0"><span class="muted">登录设备</span><span>📱 手机 / 💻 电脑</span></div>
+    <div class="between" style="padding:5px 0"><span class="muted">数据存储</span><span>本浏览器 localStorage</span></div>
+  </div>
+  <button class="btn btn-danger" data-act="logout">⎋ 退出登录</button>`;
+}
+
+/* ================= 业务动作 ================= */
+function createFamily(name){
+  const u=me();if(!u)return;
+  if(db.family&&u.familyId){toast('你已加入家庭','err');return;}
+  if(!db.family)db.family={id:'f'+uid(),name,dailyDeductLimit:20};
+  u.familyId=db.family.id;u.role='manager';
+  if(db.users.filter(x=>x.familyId===db.family.id).length<2&&members().length===1)db.family.name=name;
+  save();closeModal();toast('家庭创建成功 🎉','ok');go('#/dashboard');render();
+}
+function joinFamily(code){
+  const u=me();if(!u)return;
+  const f=db.family;
+  if(!f){toast('对方还没创建家庭','err');return;}
+  if(u.familyId){toast('你已加入家庭','err');return;}
+  const inv=db.invites.find(i=>i.code===code.trim().toUpperCase()&&!i.used&&i.expiresAt>Date.now());
+  if(!inv){toast('邀请码无效或已过期','err');return;}
+  inv.used=true;u.familyId=f.id;u.role='member';
+  save();closeModal();toast('加入成功 ❤','ok');go('#/dashboard');render();
+}
+function score(sign){
+  const u=me(),f=myFamily();
+  const tid=$('#pt-target').value,pts=parseInt($('#pt-points').value,10),reason=$('#pt-reason').value.trim();
+  if(tid===u.id){toast('不能给自己加减分','err');return;}
+  if(!Number.isInteger(pts)||pts===0||Math.abs(pts)>1000){toast('分值需为 ±1~1000 的整数','err');return;}
+  if(!reason){toast('请填写原因','err');return;}
+  const val=sign>0?Math.abs(pts):-Math.abs(pts);
+  if(val<0&&todayDeduct(tid)+Math.abs(val)>f.dailyDeductLimit){toast(`今日已扣满 ${f.dailyDeductLimit} 分`,'err');return;}
+  db.records.push({id:'r'+uid(),familyId:f.id,fromUserId:u.id,toUserId:tid,points:val,reason,createdAt:new Date().toISOString()});
+  save();toast(sign>0?'已加分 ⭐':'已扣分 🥺','ok');render();
+}
+function sendAppeal(rid){
+  const u=me(),r=db.records.find(x=>x.id===rid);
+  const title=$('#ap-title').value.trim(),text=$('#ap-text').value.trim();
+  if(title.length<2){toast('标题至少2个字','err');return;}
+  if(text.length<5||text.length>500){toast('说明需5~500字','err');return;}
+  if(appealsOf(rid).some(a=>a.status==='pending')){toast('该记录已有申诉在处理','err');return;}
+  db.appeals.push({id:'ap'+uid(),familyId:r.familyId,pointsRecordId:rid,appellantId:u.id,reason:title,explanation:text,
+    letterTitle:title,status:'pending',isReadByManager:false,createdAt:new Date().toISOString()});
+  save();toast('申诉信已寄出 💌','ok');go('#/appeals');
+}
+function appealResolve(id,mode){
+  const a=db.appeals.find(x=>x.id===id);if(!a||a.status!=='pending')return;
+  const resp=$('#ap-resp')?.value.trim()||'',letter=$('#ap-letter')?.value.trim()||'';
+  const r=db.records.find(x=>x.id===a.pointsRecordId);
+  if(mode==='reject'&&!resp){toast('驳回需填写回复内容','err');return;}
+  if(mode==='modify'){
+    const mp=parseInt($('#ap-mod')?.value,10);
+    if(!Number.isInteger(mp)||mp>=0){toast('修改后的扣分必须是负数（例如 -5）','err');return;}
+    if(!r||Math.abs(mp)>=Math.abs(r.points)){toast('修改扣分需比原扣分更轻','err');return;}
+    if(!resp){toast('修改扣分必须填写处理理由','err');return;}
+    const delta=mp-r.points; // 原-10 改-5 → 补偿 +5
+    db.records.push({id:'r'+uid(),familyId:a.familyId,fromUserId:me().id,toUserId:r.toUserId,points:delta,
+      reason:`申诉修改扣分（原${r.points} → 修改为${mp}，补偿${Math.abs(delta)}分）`,createdAt:new Date().toISOString()});
+    a.status='modified';a.modifiedPoints=mp;
+  }else if(mode==='approve'){
+    a.status='approved';
+    // 全额补偿：原扣分的相反数
+    if(r)db.records.push({id:'r'+uid(),familyId:a.familyId,fromUserId:me().id,toUserId:r.toUserId,points:-r.points,
+      reason:`申诉批准补偿（原记录：${r.reason}）`,createdAt:new Date().toISOString()});
+  }else{
+    a.status='rejected'; // 原扣分保持不变
+  }
+  a.managerResponse=resp||(mode==='approve'?'同意处理':'');a.managerReplyLetter=letter;a.resolvedAt=new Date().toISOString();
+  save();closeModal();toast(mode==='reject'?'已驳回':mode==='approve'?'已通过并补偿积分 ✓':'已修改并补偿 ✓','ok');go('#/appeals');render();
+}
+function f(){return db.family;}
+
+/* ================= 事件 ================= */
+document.addEventListener('click',e=>{
+  const el=e.target.closest('[data-act]');if(!el)return;
+  const act=el.dataset.act;
+  switch(act){
+    case 'go':go(el.dataset.hash);break;
+    case 'overlay':if(e.target===el)closeModal();break;
+    case 'close-modal':closeModal();break;
+    case 'wechat-login':wechatLoginModal();break;
+    case 'pick-user':db.session=el.dataset.id;save();closeModal();toast('微信登录成功 💚','ok');go('#/dashboard');break;
+    case 'create-family':openModal(`<h3>💝 创建家庭</h3><label class="label">家庭名称</label><input class="input" id="fam-name" value="我们的小家" maxlength="20"><div class="row mt"><button class="btn btn-candy" data-act="create-family-ok">创建</button></div><button class="btn btn-danger btn-sm mt" style="width:100%" data-act="close-modal">取消</button>`);break;
+    case 'create-family-ok':{const n=$('#fam-name').value.trim()||'我们的小家';createFamily(n);break;}
+    case 'join-family':openModal(`<h3>💌 输入邀请码</h3><input class="input" id="inv-code" placeholder="6位邀请码" maxlength="6" style="text-transform:uppercase"><div class="row mt"><button class="btn btn-candy" data-act="join-ok">加入</button></div><button class="btn btn-danger btn-sm mt" style="width:100%" data-act="close-modal">取消</button>`);break;
+    case 'join-ok':joinFamily($('#inv-code').value);break;
+    case 'show-invite':{
+      const code=Array.from({length:6},()=>('ABCDEFGHJKMNPQRSTUVWXYZ23456789')[Math.floor(Math.random()*32)]).join('');
+      db.invites.push({code,expiresAt:Date.now()+7*86400e3,used:false});save();
+      const valid=db.invites.filter(i=>!i.used&&i.expiresAt>Date.now());
+      openModal(`<h3>💌 邀请码</h3><div class="center" style="font-size:30px;font-weight:800;letter-spacing:8px;color:var(--pink-d);padding:14px">${code}</div>
+        <div class="muted center">7天内有效 · 发给另一半输入加入</div><hr class="hr">
+        <div class="label">有效邀请码</div>${valid.map(i=>`<div class="between" style="padding:4px 0"><span class="mono">${i.code}</span><span class="muted">${new Date(i.expiresAt).toLocaleDateString()} 到期</span></div>`).join('')}
+        <button class="btn btn-ghost btn-sm mt" style="width:100%" data-act="close-modal">关闭</button>`);break;}
+    case 'family-settings':openModal(`<h3>⚙ 家庭设置</h3><label class="label">家庭名称</label><input class="input" id="set-name" value="${esc(f().name)}" maxlength="20">
+      <label class="label">每日扣分上限</label><input class="input" id="set-limit" type="number" value="${f().dailyDeductLimit}">
+      <button class="btn btn-candy mt" data-act="save-family">保存</button><button class="btn btn-danger btn-sm mt" style="width:100%" data-act="close-modal">取消</button>`);break;
+    case 'save-family':{const n=$('#set-name').value.trim();const l=parseInt($('#set-limit').value,10);
+      if(!n){toast('名称不能为空','err');return;}
+      if(!Number.isInteger(l)||l<0){toast('上限需为非负整数','err');return;}
+      f().name=n;f().dailyDeductLimit=l;save();closeModal();toast('已保存','ok');render();break;}
+    case 'score':score(parseInt(el.dataset.sign,10));break;
+    case 'insert-emoji':{const ta=$('#ap-text');const s=ta.selectionStart??ta.value.length;ta.value=ta.value.slice(0,s)+el.dataset.e+ta.value.slice(ta.selectionEnd??s);ta.focus();break;}
+    case 'send-appeal':sendAppeal(el.dataset.id);break;
+    case 'ann-type':annType=el.dataset.t;viewAnniversaries();break;
+    case 'ann-add':{
+      const t=$('#ann-title').value.trim(),d=$('#ann-date').value;
+      if(!t){toast('请填写名称','err');return;}
+      if(!d){toast('请选择日期','err');return;}
+      db.anniversaries.push({id:'a'+uid(),title:t,date:d,type:annType});save();toast('已添加 ❤','ok');render();break;}
+    case 'appeal-modify-show':$('#mod-box').style.display='block';$('#mod-confirm').style.display='block';el.style.display='none';break;
+    case 'appeal-approve':appealResolve(el.dataset.id,'approve');break;
+    case 'appeal-reject':appealResolve(el.dataset.id,'reject');break;
+    case 'appeal-modify':appealResolve(el.dataset.id,'modify');break;
+    case 'pick-avatar':$('#avatar-file').click();break;
+    case 'save-nick':{const n=$('#nick').value.trim();if(n.length<1){toast('昵称不能为空','err');return;}
+      me().name=n;save();toast('已保存','ok');render();break;}
+    case 'logout':db.session=null;save();closeModal();toast('已退出登录');go('#/login');break;
+  }
+});
+document.addEventListener('change',e=>{
+  if(e.target.id==='avatar-file'){
+    const file=e.target.files[0];if(!file)return;
+    if(file.size>5*1024*1024){toast('图片不能超过 5MB','err');return;}
+    const fr=new FileReader();
+    fr.onload=()=>{me().avatar=fr.result;save();toast('头像已更新 🖼','ok');render();};
+    fr.readAsDataURL(file);
+  }
+});
+
+/* ================= 路由 ================= */
+function render(){
+  const h=location.hash.replace(/^#/,'')||'/dashboard';
+  const [path,qs]=h.split('?');
+  const q={};(qs||'').split('&').filter(Boolean).forEach(p=>{const[k,v]=p.split('=');q[k]=decodeURIComponent(v||'')});
+  if(path==='/login'||!db.session){
+    if(path==='/login'||!db.session&&path==='/'){viewLogin();if(path!=='/login')return;}
+    else if(!db.session){viewLogin();return;}
+  }
+  if(!db.session){viewLogin();return;}
+  switch(path){
+    case '/login':viewLogin();break;
+    case '/dashboard':viewDashboard();break;
+    case '/points':viewPoints();break;
+    case '/appeal-write':viewAppealWrite(q);break;
+    case '/appeals':viewAppeals();break;
+    case '/appeal':viewAppealDetail(q);break;
+    case '/anniversaries':viewAnniversaries();break;
+    case '/profile':viewProfile();break;
+    default:viewDashboard();
+  }
+}
+window.addEventListener('hashchange',render);
+if(!location.hash)location.hash=db.session?'#/dashboard':'#/login';
+render();
+</script>
+</body>
+</html>
